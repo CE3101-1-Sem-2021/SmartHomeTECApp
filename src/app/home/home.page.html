@@ -1,20 +1,18 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Inicio</ion-title>
   </ion-toolbar>
 </ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+<ion-content padding>
+  <div>
+    <h1>{{ usuario.name }} {{usuario.lName}}</h1>
+    <h3>{{usuario.region.contient}}, {{usuario.region.country}}</h3>
+    <h3>{{usuario.email}}</h3>
+    <h3 *ngFor="let addr of usuario.deliveryAddress">
+      {{addr.province}}, {{addr.district}}, {{addr.detail}}
+    </h3>
   </div>
 </ion-content>

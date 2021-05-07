@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Detalles de dispositivo</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <h1>{{loadedDevice.name}}</h1>
+  <h3>Id: {{loadedDevice.id}}</h3>
+  <h3>Type: {{loadedDevice.type}}</h3>
+  <h3>Comsumption: {{loadedDevice.consumption}}</h3>
+  <h3>Brand: {{loadedDevice.brand}}</h3>
+  <h3>Aposento: {{loadedDevice.aposento}}</h3>
+  <h4>Descripcion: {{loadedDevice.description}}</h4>
+  <ion-button>Encerder</ion-button> <ion-button>Apagar</ion-button>
+</ion-content>

@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Aposentos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <div scrollY="true">
+    <ion-list>
+      <ion-item *ngFor="let aposento of aposentos">
+        <ion-card style="width: 100%">
+          <ion-card-header>
+            <ion-card-subtitle>
+              <ion-icon
+                id="trashIcon"
+                style="float: right"
+                name="trash-outline"
+                vertical="top"
+                horizontal="end"
+                (click)="delete(aposento)"
+              ></ion-icon>
+            </ion-card-subtitle>
+            <ion-card-title>{{aposento.name}}</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content> </ion-card-content>
+          <ion-icon
+            name="search-outline"
+            class="icon"
+            [routerLink]="['./', aposento.name]"
+          ></ion-icon>
+          <ion-icon
+            name="create-outline"
+            item-left
+            class="icon"
+            (click)="rename(aposento)"
+          ></ion-icon>
+        </ion-card>
+      </ion-item>
+    </ion-list>
+  </div>
+  <!-- fab placed to the top end -->
+  <ion-fab
+    vertical="bottom"
+    horizontal="end"
+    slot="fixed"
+    (click)="addAposento()"
+  >
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

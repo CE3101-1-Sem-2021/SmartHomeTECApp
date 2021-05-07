@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>SmarthHomeTEC</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-card class="ion-align-items-center" id="loginCard">
+            <!-- Input with placeholder -->
+            <ion-input
+              id="usernameFld"
+              [(ngModel)]="usernameFld"
+              placeholder="Username"
+            ></ion-input>
+            <!-- Input with placeholder -->
+            <ion-input
+              id="passwordFld"
+              type="password"
+              placeholder="Password"
+              [(ngModel)]="passwordFld"
+            ></ion-input>
+            <ion-button expand="full" id="loginBtn" (click)="validateLogin()"
+              >Login</ion-button
+            >
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+</ion-content>
