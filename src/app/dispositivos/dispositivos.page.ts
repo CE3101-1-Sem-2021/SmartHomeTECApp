@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { AposentosService } from '../aposentos/aposentos.service';
+import { UsuarioService } from '../home/usuario.service';
+import { Aposentos } from '../models/aposentos';
 import { Device } from '../models/device';
+import { Dispositivo } from '../models/dispositivo';
 import { DeviceService } from './device.service';
 
 @Component({
@@ -9,14 +13,57 @@ import { DeviceService } from './device.service';
   styleUrls: ['./dispositivos.page.scss'],
 })
 export class DispositivosPage implements OnInit {
+  public showDetails = false;
+  aposentosDisponibles: Aposentos[] = [new Aposentos()];
   device: Device[];
+  dispositivos: Dispositivo[] = [new Dispositivo()];
   constructor(
     private dispositivosService: DeviceService,
-    public alertController: AlertController
+    public alertController: AlertController,
+    public usuarioService: UsuarioService,
+    public aposentosService: AposentosService
   ) {}
 
   ngOnInit() {
-    this.device = this.dispositivosService.device;
+    this.aposentosService
+      .getAposentos(
+        this.usuarioService.usuarioToken,
+        this.usuarioService.usuarioId
+      )
+      .then((response) => {
+        //console.log(response.text());
+        if (!response.ok) {
+          throw new Error(response.toString());
+        }
+        return response.text();
+      })
+      .then((result) => {
+        this.aposentosDisponibles = JSON.parse(result) as [Aposentos];
+        console.log(result);
+      })
+      .catch(async (err) => {
+        console.log(err);
+      });
+    this.dispositivosService
+      .getDevices(
+        this.usuarioService.usuarioToken,
+        this.usuarioService.usuarioId
+      )
+      .then((response) => {
+        console.log(response);
+        if (!response.ok) {
+          throw new Error(response.toString());
+        }
+        return response.text();
+      })
+      .then((result) => {
+        this.dispositivos = JSON.parse(result) as [Dispositivo];
+        console.log(this.dispositivos);
+        this.dispositivosService.dispositivos = this.dispositivos;
+      })
+      .catch(async (err) => {
+        console.log(err);
+      });
   }
 
   delete(device: Device) {
@@ -26,7 +73,7 @@ export class DispositivosPage implements OnInit {
     }
   }
 
-  async rename(device: Device) {
+  async rename(device: Dispositivo) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class2',
       header: 'Renombrar dispositivo',
@@ -35,6 +82,28 @@ export class DispositivosPage implements OnInit {
           text: 'Ok',
           handler: (alertData) => {
             device.name = alertData.name2;
+            // eslint-disable-next-line max-len
+            this.dispositivosService
+              .renameDevice(
+                this.usuarioService.usuarioToken,
+                this.usuarioService.usuarioId,
+                device.serialNo,
+                device.roomName,
+                alertData.name2
+              )
+              .then((response) => {
+                console.log(response);
+                if (!response.ok) {
+                  throw response.text();
+                }
+                return response.text();
+              })
+              .then((result) => {
+                console.log(result);
+              })
+              .catch(async (err) => {
+                console.log(err);
+              });
           },
         },
       ],
@@ -51,7 +120,44 @@ export class DispositivosPage implements OnInit {
     await alert.present();
   }
 
-  async transfer(device: Device) {
+  async changeAposento(device: Dispositivo, newAposento: string) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class2',
+      header: 'Cambiando aposento de ' + device.roomName + ' a ' + newAposento,
+      buttons: [
+        {
+          text: 'Ok',
+          handler: (alertData) => {
+            // eslint-disable-next-line max-len
+            this.dispositivosService
+              .renameDevice(
+                this.usuarioService.usuarioToken,
+                this.usuarioService.usuarioId,
+                device.serialNo,
+                newAposento,
+                device.name
+              )
+              .then((response) => {
+                console.log(response);
+                if (!response.ok) {
+                  throw response.text();
+                }
+                return response.text();
+              })
+              .then((result) => {
+                console.log(result);
+              })
+              .catch(async (err) => {
+                console.log(err);
+              });
+          },
+        },
+      ],
+    });
+    await alert.present();
+  }
+
+  async transfer(device: Dispositivo) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class2',
       header: 'Transferir dispositivo',
@@ -59,7 +165,28 @@ export class DispositivosPage implements OnInit {
       buttons: [
         {
           text: 'Ok',
-          handler: (alertData) => {},
+          handler: (alertData) => {
+            this.dispositivosService
+              .transferDevice(
+                this.usuarioService.usuarioToken,
+                this.usuarioService.usuarioId,
+                alertData.name2,
+                device.serialNo
+              )
+              .then((response) => {
+                console.log(response);
+                if (!response.ok) {
+                  throw response.text();
+                }
+                return response.text();
+              })
+              .then((result) => {
+                console.log(result);
+              })
+              .catch(async (err) => {
+                console.log(err);
+              });
+          },
         },
         {
           // eslint-disable-next-line @typescript-eslint/quotes
@@ -154,5 +281,8 @@ export class DispositivosPage implements OnInit {
       ],
     });
     await alert.present();
+  }
+  toggleDetails() {
+    this.showDetails = !this.showDetails;
   }
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
+import { UsuarioService } from '../home/usuario.service';
 import { Aposentos } from '../models/aposentos';
 import { AposentosService } from './aposentos.service';
 
@@ -9,14 +10,35 @@ import { AposentosService } from './aposentos.service';
   styleUrls: ['./aposentos.page.scss'],
 })
 export class AposentosPage implements OnInit {
-  aposentos: Aposentos[];
+  aposentos: Aposentos[] = [new Aposentos()];
   constructor(
     private aposentosService: AposentosService,
-    public alertController: AlertController
+    public alertController: AlertController,
+    public usuarioService: UsuarioService
   ) {}
 
   ngOnInit() {
-    this.aposentos = this.aposentosService.aposentos;
+    this.aposentosService
+      .getAposentos(
+        this.usuarioService.usuarioToken,
+        this.usuarioService.usuarioId
+      )
+      .then((response) => {
+        //console.log(response.text());
+        if (!response.ok) {
+          throw new Error(response.toString());
+        }
+        return response.text();
+      })
+      .then((result) => {
+        this.aposentos = JSON.parse(result) as [Aposentos];
+        console.log(result);
+        this.aposentosService.aposentos = this.aposentos;
+      })
+      .catch(async (err) => {
+        console.log(err);
+      });
+    //this.aposentos = this.aposentosService.aposentos;
   }
 
   async rename(aposento: Aposentos) {

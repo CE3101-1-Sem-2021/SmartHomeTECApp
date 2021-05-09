@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core';
 import { Device } from '../models/device';
+import { Dispositivo } from '../models/dispositivo';
+
+const myHeaders = new Headers();
+myHeaders.append('Content-Type', 'application/json');
 
 @Injectable({
   providedIn: 'root',
 })
 export class DeviceService {
-  deviceByAposento: Device[];
+  deviceByAposento: Dispositivo[] = [new Dispositivo()];
+  dispositivos: Dispositivo[] = [new Dispositivo()];
   device: Device[] = [
     {
       name: 'Samsung 10',
@@ -51,18 +56,72 @@ export class DeviceService {
 
   constructor() {}
 
+  async getDevices(tokenUser: string, id: string) {
+    return fetch(
+      'http://192.168.0.8:45455/api/Device/' + id + '/' + tokenUser,
+      {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow',
+        mode: 'cors',
+      }
+    );
+  }
+
+  async renameDevice(
+    tokenUser: string,
+    id: string,
+    deviceID: string,
+    aposento: string,
+    newName: string
+  ) {
+    return fetch(
+      'http://192.168.0.8:45455/api/Device/Client/' + deviceID + '/' + id,
+      {
+        method: 'PUT',
+        headers: myHeaders,
+        redirect: 'follow',
+        body: JSON.stringify({
+          name: newName,
+          roomName: aposento,
+          token: tokenUser,
+        }),
+        mode: 'cors',
+      }
+    );
+  }
+
+  async transferDevice(
+    tokenUser: string,
+    idUser: string,
+    newUserEmail: string,
+    deviceID: string
+  ) {
+    return fetch('http://192.168.0.8:45455/api/Device/Transfer/' + deviceID, {
+      method: 'PUT',
+      headers: myHeaders,
+      redirect: 'follow',
+      body: JSON.stringify({
+        id: idUser,
+        token: tokenUser,
+        email: newUserEmail,
+      }),
+      mode: 'cors',
+    });
+  }
+
   getAllDevices() {
     return [...this.device];
   }
 
   getDevice(deviceId: string) {
     return {
-      ...this.device.find(
+      ...this.dispositivos.find(
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         // eslint-disable-next-line arrow-body-style
         (device) => {
           // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-          return device.id === deviceId;
+          return device.serialNo === deviceId;
         }
       ),
     };
@@ -71,12 +130,12 @@ export class DeviceService {
   getDevicesByAposento(aposento: string) {
     this.deviceByAposento = [];
     return {
-      ...this.device.find(
+      ...this.dispositivos.find(
         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         // eslint-disable-next-line arrow-body-style
         (device) => {
           // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-          if (device.aposento === aposento) {
+          if (device.roomName === aposento) {
             this.deviceByAposento.push(device);
           }
         }

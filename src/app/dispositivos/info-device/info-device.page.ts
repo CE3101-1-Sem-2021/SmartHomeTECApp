@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Device } from 'src/app/models/device';
+import { Dispositivo } from 'src/app/models/dispositivo';
 import { DeviceService } from '../device.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { DeviceService } from '../device.service';
   styleUrls: ['./info-device.page.scss'],
 })
 export class InfoDevicePage implements OnInit {
-  loadedDevice: Device;
+  loadedDevice: Dispositivo;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -23,7 +24,7 @@ export class InfoDevicePage implements OnInit {
         return;
       }
       const deviceId = paramMap.get('deviceId');
-      console.log('Device' + deviceId);
+      //console.log('Device' + deviceId);
       this.loadedDevice = this.dispositivosService.getDevice(deviceId);
     });
   }

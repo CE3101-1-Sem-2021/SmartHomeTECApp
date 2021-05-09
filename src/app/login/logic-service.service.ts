@@ -1,23 +1,27 @@
 import { Injectable } from '@angular/core';
 
+const myHeaders = new Headers();
+myHeaders.append('Content-Type', 'application/json');
+
 @Injectable({
   providedIn: 'root',
 })
 export class LogicServiceService {
-  username = 'fabi';
-  password = 'fa';
-
+  token = '';
+  email = '';
   constructor() {}
 
-  validateCredentials(username: string, password: string) {
-    if (this.username === username) {
-      if (this.password === password) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
+  validateCredentials(usernameFld: string, passwordFld: string) {
+    this.email = usernameFld;
+    return fetch('http://192.168.0.8:45455/api/Client/Login', {
+      method: 'POST',
+      headers: myHeaders,
+      body: JSON.stringify({
+        email: usernameFld, //'dcamachog99@gmail.com',
+        password: passwordFld,
+      }),
+      redirect: 'follow',
+      mode: 'cors',
+    });
   }
 }

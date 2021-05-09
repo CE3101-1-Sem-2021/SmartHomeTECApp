@@ -8,11 +8,9 @@
 </ion-header>
 <ion-content padding>
   <div>
-    <h1>{{ usuario.name }} {{usuario.lName}}</h1>
-    <h3>{{usuario.region.contient}}, {{usuario.region.country}}</h3>
-    <h3>{{usuario.email}}</h3>
-    <h3 *ngFor="let addr of usuario.deliveryAddress">
-      {{addr.province}}, {{addr.district}}, {{addr.detail}}
-    </h3>
+    <h1>{{ usuario2.name }} {{usuario2.lastname}}</h1>
+    <h3>{{usuario2.continent}}, {{usuario2.country}}</h3>
+    <h3>{{usuario2.email}}</h3>
+    <h3 *ngFor="let addr of usuario2.addresses">{{addr}}</h3>
   </div>
 </ion-content>

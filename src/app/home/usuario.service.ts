@@ -1,27 +1,24 @@
 import { Injectable } from '@angular/core';
 import { Usuario } from '../models/usuario';
 
+const myHeaders = new Headers();
+myHeaders.append('Content-Type', 'application/json');
+
 @Injectable({
   providedIn: 'root',
 })
 export class UsuarioService {
-  usuario: Usuario = {
-    name: 'Fabian',
-    lName: 'Crawford',
-    email: 'fabian152195@gmail.com',
-    password: '',
-    region: {
-      contient: 'America',
-      country: 'Costa Rica',
-    },
-    deliveryAddress: [
-      {
-        province: 'Limón',
-        district: 'Guácimo',
-        detail: '100 mts Colono Construcción',
-      },
-    ],
-  };
+  usuarioId = '';
+  usuarioToken = '';
 
   constructor() {}
+
+  async getUserData(tokenUser: string) {
+    return fetch('http://192.168.0.8:45455/api/Client/' + tokenUser, {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+      mode: 'cors',
+    });
+  }
 }

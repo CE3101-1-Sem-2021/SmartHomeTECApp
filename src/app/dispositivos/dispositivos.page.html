@@ -10,9 +10,9 @@
 <ion-content>
   <div scrollY="true">
     <ion-list>
-      <ion-item *ngFor="let dev of device">
+      <ion-item *ngFor="let dev of dispositivos">
         <ion-card style="width: 100%">
-          <ion-card-header>
+          <ion-card-header type="button" (click)="toggleDetails()">
             <ion-card-subtitle>
               <ion-icon
                 id="trashIcon"
@@ -24,13 +24,23 @@
               ></ion-icon>
             </ion-card-subtitle>
             <ion-card-title>{{dev.name}}</ion-card-title>
+            <h4>{{dev.serialNo}}</h4>
           </ion-card-header>
-
-          <ion-card-content> {{dev.description}} </ion-card-content>
+          <ion-card-content *ngIf="showDetails">
+            <ion-label>Aposentos</ion-label>
+            <ion-list *ngFor="let item of aposentosDisponibles">
+              <ion-button
+                ion-button
+                full
+                (click)="changeAposento(dev,item.name)"
+                >{{item.name}}</ion-button
+              >
+            </ion-list>
+          </ion-card-content>
           <ion-icon
             name="search-outline"
             class="icon"
-            [routerLink]="['./', dev.id]"
+            [routerLink]="['./', dev.serialNo]"
           ></ion-icon>
           <ion-icon
             name="create-outline"
