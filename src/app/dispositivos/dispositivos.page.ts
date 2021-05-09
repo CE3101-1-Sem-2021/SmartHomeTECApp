@@ -224,14 +224,31 @@ export class DispositivosPage implements OnInit {
               alertData.aposento === ''
             ) {
             } else {
-              device.id = alertData.id;
-              device.name = 'Undefined';
-              device.type = alertData.tipo;
-              device.description = alertData.descripcion;
-              device.consumption = alertData.consumo;
-              device.brand = alertData.marca;
-              device.aposento = alertData.aposento;
-              this.dispositivosService.device.push(device);
+              // eslint-disable-next-line max-len
+              this.dispositivosService
+                .asociarDispositivo(
+                  this.usuarioService.usuarioToken,
+                  this.usuarioService.usuarioId,
+                  alertData.id,
+                  alertData.aposento,
+                  alertData.tipo,
+                  alertData.marca,
+                  alertData.consumo,
+                  alertData.name
+                )
+                .then((response) => {
+                  console.log(response);
+                  if (!response.ok) {
+                    throw response.text();
+                  }
+                  return response.text();
+                })
+                .then((result) => {
+                  console.log(result);
+                })
+                .catch(async (err) => {
+                  console.log(err);
+                });
             }
           },
         },
@@ -247,6 +264,12 @@ export class DispositivosPage implements OnInit {
           type: 'text',
           id: 'id',
           placeholder: 'Numero de serie',
+        },
+        {
+          name: 'name',
+          type: 'text',
+          id: 'name',
+          placeholder: 'Nombre',
         },
         {
           name: 'descripcion',
@@ -269,8 +292,8 @@ export class DispositivosPage implements OnInit {
         {
           name: 'consumo',
           type: 'text',
-          id: 'name2',
-          placeholder: 'Numero de serie',
+          id: 'consumo',
+          placeholder: 'Consumo',
         },
         {
           name: 'aposento',

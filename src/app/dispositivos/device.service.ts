@@ -68,6 +68,33 @@ export class DeviceService {
     );
   }
 
+  async asociarDispositivo(
+    tokenUser: string,
+    id: string,
+    deviceID: string,
+    aposento: string,
+    typeDev: string,
+    brandDev: string,
+    consumptionDev: string,
+    nameDev: string
+  ) {
+    return fetch('http://192.168.0.8:45455/api/Device/Affiliate/' + id, {
+      method: 'PUT',
+      headers: myHeaders,
+      redirect: 'follow',
+      body: JSON.stringify({
+        type: typeDev,
+        name: nameDev,
+        brand: brandDev,
+        serialNo: deviceID,
+        consumption: consumptionDev,
+        roomName: aposento,
+        token: tokenUser,
+      }),
+      mode: 'cors',
+    });
+  }
+
   async renameDevice(
     tokenUser: string,
     id: string,
