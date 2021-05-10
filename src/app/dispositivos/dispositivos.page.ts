@@ -66,11 +66,44 @@ export class DispositivosPage implements OnInit {
       });
   }
 
-  delete(device: Device) {
-    const index = this.device.indexOf(device, 0);
-    if (index > -1) {
-      this.device.splice(index, 1);
-    }
+  async delete(device: Dispositivo) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class2',
+      header: 'Desea eliminar el dispositivo?',
+      subHeader: 'Esta acción eliminará permanentemente este dispositivo',
+      buttons: [
+        {
+          text: 'Ok',
+          handler: (alertData) => {
+            this.dispositivosService
+              .deleteDevice(
+                this.usuarioService.usuarioToken,
+                this.usuarioService.usuarioId,
+                device.serialNo
+              )
+              .then((response) => {
+                console.log(response);
+                if (!response.ok) {
+                  throw response.text();
+                }
+                return response.text();
+              })
+              .then((result) => {
+                console.log(result);
+              })
+              .catch(async (err) => {
+                console.log(err);
+              });
+          },
+        },
+        {
+          // eslint-disable-next-line @typescript-eslint/quotes
+          text: 'No eliminar',
+          handler: (alertData) => {},
+        },
+      ],
+    });
+    await alert.present();
   }
 
   async rename(device: Dispositivo) {

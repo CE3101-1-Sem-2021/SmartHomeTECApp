@@ -68,6 +68,19 @@ export class DeviceService {
     );
   }
 
+  async deleteDevice(tokenUser: string, idUser: string, deviceID: string) {
+    return fetch('http://192.168.0.8:45455/api/Device/Client/' + deviceID, {
+      method: 'DELETE',
+      headers: myHeaders,
+      redirect: 'follow',
+      body: JSON.stringify({
+        id: idUser,
+        token: tokenUser,
+      }),
+      mode: 'cors',
+    });
+  }
+
   async asociarDispositivo(
     tokenUser: string,
     id: string,
