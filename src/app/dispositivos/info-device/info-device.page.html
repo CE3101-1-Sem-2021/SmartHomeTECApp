@@ -14,5 +14,6 @@
   <h3>Comsumption: {{loadedDevice.consumption}}</h3>
   <h3>Brand: {{loadedDevice.brand}}</h3>
   <h3>Aposento: {{loadedDevice.roomName}}</h3>
-  <ion-button>Encerder</ion-button> <ion-button>Apagar</ion-button>
+  <ion-button (click)="turnOn()">Encerder</ion-button>
+  <ion-button (click)="turnOff()">Apagar</ion-button>
 </ion-content>

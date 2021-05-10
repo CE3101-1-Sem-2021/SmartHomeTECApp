@@ -49,7 +49,27 @@ export class AposentosPage implements OnInit {
         {
           text: 'Ok',
           handler: (alertData) => {
-            aposento.name = alertData.name2;
+            // eslint-disable-next-line max-len
+            this.aposentosService
+              .renameAposento(
+                this.usuarioService.usuarioToken,
+                this.usuarioService.usuarioId,
+                aposento.name,
+                alertData.name2
+              )
+              .then((response) => {
+                //console.log(response.text());
+                if (!response.ok) {
+                  throw response.text();
+                }
+                return response.text();
+              })
+              .then((result) => {
+                console.log(result);
+              })
+              .catch(async (err) => {
+                console.log(err);
+              });
           },
         },
       ],
@@ -66,11 +86,44 @@ export class AposentosPage implements OnInit {
     await alert.present();
   }
 
-  delete(aposento: Aposentos) {
-    const index = this.aposentos.indexOf(aposento, 0);
-    if (index > -1) {
-      this.aposentos.splice(index, 1);
-    }
+  async delete(aposento: Aposentos) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class2',
+      header: 'Desea eliminar el dispositivo?',
+      subHeader: 'Esta acción eliminará permanentemente este dispositivo',
+      buttons: [
+        {
+          text: 'Ok',
+          handler: (alertData) => {
+            this.aposentosService
+              .deleteAposento(
+                this.usuarioService.usuarioToken,
+                this.usuarioService.usuarioId,
+                aposento.name
+              )
+              .then((response) => {
+                console.log(response);
+                if (!response.ok) {
+                  throw response.text();
+                }
+                return response.text();
+              })
+              .then((result) => {
+                console.log(result);
+              })
+              .catch(async (err) => {
+                console.log(err);
+              });
+          },
+        },
+        {
+          // eslint-disable-next-line @typescript-eslint/quotes
+          text: 'No eliminar',
+          handler: (alertData) => {},
+        },
+      ],
+    });
+    await alert.present();
   }
 
   async addAposento() {
@@ -82,8 +135,25 @@ export class AposentosPage implements OnInit {
         {
           text: 'Ok',
           handler: (alertData) => {
-            aposento.name = alertData.name2;
-            this.aposentosService.aposentos.push(aposento);
+            this.aposentosService
+              .addAposento(
+                this.usuarioService.usuarioToken,
+                this.usuarioService.usuarioId,
+                alertData.name2
+              )
+              .then((response) => {
+                console.log(response);
+                if (!response.ok) {
+                  throw response.text();
+                }
+                return response.text();
+              })
+              .then((result) => {
+                console.log(result);
+              })
+              .catch(async (err) => {
+                console.log(err);
+              });
           },
         },
       ],

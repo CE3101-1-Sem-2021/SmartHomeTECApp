@@ -56,6 +56,42 @@ export class DeviceService {
 
   constructor() {}
 
+  async turnOnDispositivo(tokenUser: string, idUser: string, deviceID: string) {
+    return fetch(
+      'http://192.168.0.8:45455/api/Device/SwitchState/turnOn/' + deviceID,
+      {
+        method: 'PUT',
+        headers: myHeaders,
+        redirect: 'follow',
+        body: JSON.stringify({
+          id: idUser,
+          token: tokenUser,
+        }),
+        mode: 'cors',
+      }
+    );
+  }
+
+  async turnOffDispositivo(
+    tokenUser: string,
+    idUser: string,
+    deviceID: string
+  ) {
+    return fetch(
+      'http://192.168.0.8:45455/api/Device/SwitchState/turnOff/' + deviceID,
+      {
+        method: 'PUT',
+        headers: myHeaders,
+        redirect: 'follow',
+        body: JSON.stringify({
+          id: idUser,
+          token: tokenUser,
+        }),
+        mode: 'cors',
+      }
+    );
+  }
+
   async getDevices(tokenUser: string, id: string) {
     return fetch(
       'http://192.168.0.8:45455/api/Device/' + id + '/' + tokenUser,
