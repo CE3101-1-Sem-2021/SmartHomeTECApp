@@ -13,6 +13,7 @@ import { AlertController } from '@ionic/angular';
 })
 export class InfoDevicePage implements OnInit {
   loadedDevice: Dispositivo;
+  deviceWarranty: any;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -30,6 +31,22 @@ export class InfoDevicePage implements OnInit {
       const deviceId = paramMap.get('deviceId');
       //console.log('Device' + deviceId);
       this.loadedDevice = this.dispositivosService.getDevice(deviceId);
+      this.dispositivosService
+        .getWarranty(this.loadedDevice.serialNo)
+        .then((response) => {
+          console.log(response);
+          if (!response.ok) {
+            throw response.text();
+          }
+          return response.text();
+        })
+        .then((result) => {
+          this.deviceWarranty = result;
+          console.log(result);
+        })
+        .catch(async (err) => {
+          console.log(err);
+        });
     });
   }
 

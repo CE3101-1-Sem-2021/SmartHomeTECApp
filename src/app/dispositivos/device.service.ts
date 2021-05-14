@@ -92,6 +92,15 @@ export class DeviceService {
     );
   }
 
+  async getWarranty(deviceID: string) {
+    return fetch('http://192.168.0.8:45455/api/Device/Warranty/0/' + deviceID, {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow',
+      mode: 'cors',
+    });
+  }
+
   async getDevices(tokenUser: string, id: string) {
     return fetch(
       'http://192.168.0.8:45455/api/Device/' + id + '/' + tokenUser,
