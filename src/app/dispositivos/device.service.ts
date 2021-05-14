@@ -161,7 +161,12 @@ export class DeviceService {
     newName: string
   ) {
     return fetch(
-      'http://192.168.0.8:45455/api/Device/Client/' + deviceID + '/' + id,
+      'http://192.168.0.8:45455/api/Device/Client/' +
+        deviceID +
+        '/' +
+        id +
+        '/' +
+        tokenUser,
       {
         method: 'PUT',
         headers: myHeaders,
@@ -169,7 +174,6 @@ export class DeviceService {
         body: JSON.stringify({
           name: newName,
           roomName: aposento,
-          token: tokenUser,
         }),
         mode: 'cors',
       }
